@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 297238704}
   - component: {fileID: 297238703}
   m_Layer: 5
-  m_Name: CanvasUI
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 139d873ff4851564996263891be1a7f4, type: 2}
-  _canvasUiTransform: {fileID: 297238706}
+  _canvasTransform: {fileID: 297238706}
 --- !u!4 &1843186175
 Transform:
   m_ObjectHideFlags: 0

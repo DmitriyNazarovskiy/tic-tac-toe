@@ -6,6 +6,6 @@ namespace Configs
 	[CreateAssetMenu(fileName = Constants.GameConfigNameString, menuName = Constants.GameConfigMenuPathString)]
 	public class GameConfig : ScriptableObject
 	{
-		public GameObject MainMenuPrefab;
+		public GameObject MainMenuPrefab, GameViewPrefab;
 	}
 }

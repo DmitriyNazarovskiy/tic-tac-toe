@@ -1,30 +1,23 @@
-﻿using Core;
+﻿using System;
+using Core;
 using UnityEngine;
 
 namespace Menu
 {
-	public class MenuController
+	public class MenuController : IClearable
 	{
 		private readonly MenuModel _model;
-		private MenuView _view;
+		private readonly MenuView _view;
 
-		public MenuController(ICommonFactory factory, GameObject menuPrefab, Transform canvas)
+		public MenuController(ICommonFactory factory, GameObject menuPrefab, Transform canvas, Action<int> startGameClicked)
 		{
 			_model = new MenuModel();
 
-			InitView(factory, menuPrefab, canvas);
-		}
-
-		private void InitView(ICommonFactory factory, GameObject menuPrefab, Transform canvas)
-		{
 			_view = factory.InstantiateObject<MenuView>(menuPrefab, canvas);
-			_view.InitStartButton(StartButtonClicked);
+			_view.InitStartButton(startGameClicked);
 			_view.InitModesDropdown(_model.GetGameModesTitles());
 		}
 
-		private void StartButtonClicked(int modeId)
-		{
-			Debug.Log(modeId +1);
-		}
+		public void Clear() => _view.Clear();
 	}
 }

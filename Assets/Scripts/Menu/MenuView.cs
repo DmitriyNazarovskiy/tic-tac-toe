@@ -17,7 +17,7 @@ namespace Menu
 		{
 			_startButton.onClick.AddListener(() =>
 			{
-				startButtonClickedAction?.Invoke(_modesDropdown.value);
+				startButtonClickedAction?.Invoke(_modesDropdown.value + 1); //+1 because we need to skip "None" mode which is 0
 			});
 		}
 
@@ -30,6 +30,8 @@ namespace Menu
 		public void Clear()
 		{
 			_startButton.onClick.RemoveAllListeners();
+
+			Destroy(gameObject);
 		}
 	}
 }
