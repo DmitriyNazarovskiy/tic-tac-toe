@@ -1,12 +1,15 @@
 ﻿using System;
+using Core;
+using UnityEngine;
 
 namespace Game.Cell
 {
 	public class CellController
 	{
-		private CellModel _model;
-		private CellView _view;
-		private Action<byte> _cellClickAction;
+		private readonly CellView _view;
+		private readonly Action<byte> _cellClickAction;
+
+		public CellModel Model { get; }
 
 		public CellController(CellView view, Action<byte> cellClickAction)
 		{
@@ -15,12 +18,21 @@ namespace Game.Cell
 
 			_cellClickAction = cellClickAction;
 
-			_model = new CellModel(_view.GetId());
+			Model = new CellModel(_view.GetId());
 		}
 
-		private void OnCellClicked()
+		private void OnCellClicked() => _cellClickAction?.Invoke(Model.Id);
+
+		public void SetCellState(CellState newState, Sprite sprite)
 		{
-			_cellClickAction?.Invoke(_model.Id);
+			if(Model.CurrentState != CellState.Clear)
+				return;
+
+			Model.CurrentState = newState;
+
+			_view.SetSprite(sprite);
 		}
+
+		public byte GetCellId() => Model.Id;
 	}
 }

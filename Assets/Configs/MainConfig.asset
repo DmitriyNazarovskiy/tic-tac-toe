@@ -16,3 +16,33 @@ MonoBehaviour:
     type: 3}
   GameViewPrefab: {fileID: 8514409335127252059, guid: e51cc098748e2a0438880c79834f4b0d,
     type: 3}
+  X: {fileID: 21300000, guid: 5e8278e012ff04d9a8bbd92350645568, type: 3}
+  O: {fileID: 21300000, guid: bd30ced15dd1c4a81a8798331e1abe4a, type: 3}
+  WinCombinations:
+  - Value1: 0
+    Value2: 1
+    Value3: 2
+  - Value1: 0
+    Value2: 3
+    Value3: 6
+  - Value1: 1
+    Value2: 4
+    Value3: 7
+  - Value1: 2
+    Value2: 5
+    Value3: 8
+  - Value1: 3
+    Value2: 4
+    Value3: 5
+  - Value1: 6
+    Value2: 7
+    Value3: 8
+  - Value1: 0
+    Value2: 4
+    Value3: 8
+  - Value1: 2
+    Value2: 4
+    Value3: 6
+  GameDuration: 13
+  DefaultTimerColor: {r: 1, g: 1, b: 1, a: 1}
+  LowTimerColor: {r: 1, g: 0, b: 0, a: 1}

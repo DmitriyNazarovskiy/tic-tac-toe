@@ -14,6 +14,7 @@ namespace Core
 		private ICommonFactory _commonFactory;
 		private MenuController _menuController;
 		private GameControllerBase _gameController;
+		private ITimerController _timerController;
 
 		private void Awake()
 		{
@@ -25,6 +26,7 @@ namespace Core
 		private void InitControllers()
 		{
 			_menuController = new MenuController(_commonFactory, _config.MainMenuPrefab, _canvasTransform, StartGame);
+			_timerController = new TimerController();
 		}
 
 		private void Update()
@@ -42,7 +44,7 @@ namespace Core
 			switch (modeId)
 			{
 				case 1:
-					_gameController = new GameControllerPvP(_commonFactory, _canvasTransform, _config.GameViewPrefab);
+					_gameController = new GameControllerPvP(_commonFactory, _canvasTransform, _config, _timerController);
 					break;
 				default:
 					Debug.Log("error");

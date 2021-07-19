@@ -7,4 +7,20 @@
 		PlayerVsPlayer,
 		Multiplayer
 	}
+
+	public enum CellState : byte
+	{
+		Clear = 0,
+		X,
+		O
+	}
+
+	public enum GameResult : byte
+	{
+		None,
+		Player1Win,
+		Player2Win,
+		Draw,
+		TimeOver
+	}
 }
