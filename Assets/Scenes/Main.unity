@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922265d9e203f4943a58674b8a1223fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _background: {fileID: 1194247139}
   _config: {fileID: 11400000, guid: 139d873ff4851564996263891be1a7f4, type: 2}
   _canvasTransform: {fileID: 297238706}
   _camera: {fileID: 519420031}

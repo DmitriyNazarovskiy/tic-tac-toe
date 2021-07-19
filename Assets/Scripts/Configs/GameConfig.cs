@@ -18,5 +18,6 @@ namespace Configs
 		public WinCombination[] WinCombinations;
 		public int GameDuration = 60;
 		public Color DefaultTimerColor, LowTimerColor;
+		[NonSerialized] public Sprite LoadedX, LoadedO, LoadedBg;
 	}
 }

@@ -22,7 +22,13 @@ namespace Game
 			MarkedCells = new List<CellModel>(Constants.CellsAmount);
 		}
 
-		public Sprite GetCellSprite(CellState state) => state == CellState.X ? _config.X : _config.O;
+		public Sprite GetCellSprite(CellState state)
+		{
+			if(state == CellState.X)
+				return _config.LoadedX == null ? _config.X : _config.LoadedX;
+
+			return _config.LoadedO == null ? _config.O : _config.LoadedO;
+		}
 
 		public GameResult CheckGameResult()
 		{

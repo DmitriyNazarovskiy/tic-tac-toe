@@ -8,6 +8,7 @@
 		public const string Player2String = "Player2";
 		public const string PlayerPCString = "PC";
 		public const string DefaultErrorMessage = "Something went wrong";
+		public const string PlayerPrefsBundleKey = "BUNDLE";
 
 		public const int CellsAmount = 9;
 		public const int RequiredMarksForWin = 3;

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -108,5 +108,7 @@ public class BundleBuilder : EditorWindow
 		{
 			Debug.LogFormat("Bundle build {0}: {1}", buildTarget, bundle);
 		}
+
+		PlayerPrefs.SetString(Constants.PlayerPrefsBundleKey, Path.Combine(folderPath, allBundles[0]));
 	}
 }
