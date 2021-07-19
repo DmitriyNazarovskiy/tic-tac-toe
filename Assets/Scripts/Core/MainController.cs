@@ -21,12 +21,22 @@ namespace Core
 			_commonFactory = new CommonFactory();
 
 			InitControllers();
+
+			ShowMainMenu();
 		}
 
 		private void InitControllers()
 		{
-			_menuController = new MenuController(_commonFactory, _config.MainMenuPrefab, _canvasTransform, StartGame);
+			_menuController = new MenuController();
 			_timerController = new TimerController();
+		}
+
+		private void ShowMainMenu()
+		{
+			_menuController.CreateView(_commonFactory, _config.MainMenuPrefab, _canvasTransform, StartGame);
+
+			_gameController?.Clear();
+			_gameController = null;
 		}
 
 		private void Update()
@@ -44,10 +54,10 @@ namespace Core
 			switch (modeId)
 			{
 				case 1:
-					_gameController = new GameControllerPvP(_commonFactory, _canvasTransform, _config, _timerController);
+					_gameController = new GameControllerPvP(_commonFactory, _canvasTransform, _config, _timerController, ShowMainMenu);
 					break;
 				default:
-					Debug.Log("error");
+					Debug.Log(Constants.DefaultErrorMessage);
 					break;
 			}
 

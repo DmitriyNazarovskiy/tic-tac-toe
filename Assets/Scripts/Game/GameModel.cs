@@ -11,6 +11,7 @@ namespace Game
 	{
 		private readonly GameConfig _config;
 
+		public bool GameInProgress { get; set; } = false;
 		public CellState CurrentTurnState { get; set; } = CellState.X;
 		public List<CellModel> MarkedCells { get; }
 
@@ -44,15 +45,32 @@ namespace Game
 					var dif = ids.Intersect(values).ToList();
 
 					if (dif.Count == Constants.RequiredMarksForWin)
-					{
-						Debug.Log("WIN");
-
-						return GameResult.None;
-					}
+						return CurrentTurnState == CellState.X ? GameResult.Player1Win : GameResult.Player2Win;
 				}
 			}
 
+			if (MarkedCells.Count == Constants.CellsAmount)
+				return GameResult.Draw;
+
 			return GameResult.None;
+		}
+
+		public string GetCurrentPlayerLabel()
+		{
+			var player = CurrentTurnState == CellState.X ? PlayerType.Player1 : PlayerType.Player2;
+
+			switch (player)
+			{
+				case PlayerType.Player1:
+					return Constants.Player1String;
+				case PlayerType.Player2:
+					return Constants.Player2String;
+				default:
+					Debug.Log(Constants.DefaultErrorMessage);
+					break;
+			}
+
+			return string.Empty;
 		}
 	}
 }

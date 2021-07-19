@@ -16,6 +16,8 @@ MonoBehaviour:
     type: 3}
   GameViewPrefab: {fileID: 8514409335127252059, guid: e51cc098748e2a0438880c79834f4b0d,
     type: 3}
+  ResultPopupPrefab: {fileID: 8282253567535812328, guid: 09334258980fe4641bb51241e94aecbf,
+    type: 3}
   X: {fileID: 21300000, guid: 5e8278e012ff04d9a8bbd92350645568, type: 3}
   O: {fileID: 21300000, guid: bd30ced15dd1c4a81a8798331e1abe4a, type: 3}
   WinCombinations:

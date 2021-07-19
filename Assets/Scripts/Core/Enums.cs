@@ -23,4 +23,12 @@
 		Draw,
 		TimeOver
 	}
+
+	public enum PlayerType : byte
+	{
+		None = 0,
+		Player1,
+		Player2,
+		PC
+	}
 }

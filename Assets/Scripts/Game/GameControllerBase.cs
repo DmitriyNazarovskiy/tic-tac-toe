@@ -1,39 +1,42 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Configs;
 using Core;
 using Game.Cell;
+using Game.ResultPopup;
 using UnityEngine;
 
 namespace Game
 {
-	public abstract class GameControllerBase : IUpdatable
+	public abstract class GameControllerBase : IUpdatable, IClearable
 	{
 		private readonly GameConfig _config;
 		private readonly ITimerController _timerController;
+		private readonly ICommonFactory _factory;
 		private readonly int _timerEntityId;
+		private readonly Action _showMainMenuAction;
 
 		protected GameModel Model;
 		protected GameView View;
 
 		private CellController[] _cells;
+		private ResultPopupController _resultPopup;
 
-		protected GameControllerBase(ICommonFactory factory, Transform canvas, GameConfig config, ITimerController timerController)
+		protected GameControllerBase(ICommonFactory factory, Transform canvas, GameConfig config, ITimerController timerController, Action showMainMenu )
 		{
+			_factory = factory;
 			_config = config;
 			_timerController = timerController;
+			_showMainMenuAction = showMainMenu;
 
 			_timerEntityId = _timerController.CreateTimeEntity();
 
 			Model = new GameModel(config);
 
-			CreateGameView(factory, canvas, config.GameViewPrefab);
+			CreateGameView(_factory, canvas, config.GameViewPrefab);
 
-			View.SetTimer(_config.GameDuration);
-			View.SetTimerColor(_config.DefaultTimerColor);
-
-			InitCells();
+			StartGame();
 		}
-
 		private void InitCells()
 		{
 			_cells = new CellController[Constants.CellsAmount];
@@ -51,8 +54,24 @@ namespace Game
 			View = factory.InstantiateObject<GameView>(gamePrefab, canvas);
 		}
 
+		private void StartGame()
+		{
+			View.SetTimer(_config.GameDuration);
+			View.SetTimerColor(_config.DefaultTimerColor);
+			View.SetTurn(Model.GetCurrentPlayerLabel());
+
+			InitCells();
+
+			Model.GameInProgress = true;
+
+			_timerController.ResetTimeEntity(_timerEntityId);
+		}
+
 		private void OnCellClick(byte id)
 		{
+			if (!Model.GameInProgress)
+				return;
+
 			Debug.Log("Clicked " + id);
 
 			var cell = _cells.First(c => c.GetCellId() == id);
@@ -62,11 +81,35 @@ namespace Game
 
 			var result = Model.CheckGameResult();
 
-			SwitchTurn();
+			switch (result)
+			{
+				case GameResult.None:
+					break;
+				case GameResult.Player1Win:
+					GameFinished(GameResult.Player1Win);
+					break;
+				case GameResult.Player2Win:
+					GameFinished(GameResult.Player2Win);
+					break;
+				case GameResult.Draw:
+					GameFinished(GameResult.Draw);
+					break;
+				case GameResult.TimeOver:
+					GameFinished(GameResult.TimeOver);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			if(result == GameResult.None)
+				SwitchTurn();
 		}
 
 		public void Update(float deltaTime)
 		{
+			if(!Model.GameInProgress)
+				return;
+
 			TimerUpdate();
 		}
 
@@ -77,15 +120,54 @@ namespace Game
 			if(timerValue < Constants.RedTimerValue)
 				View.SetTimerColor(_config.LowTimerColor);
 
-			if (timerValue < 0)
+			if (timerValue == 0)
 			{
-				timerValue = 0;
+				GameFinished(GameResult.TimeOver);
 			}
 
 			View.SetTimer(timerValue);
 		}
 
 		private void SwitchTurn()
-			=> Model.CurrentTurnState = Model.CurrentTurnState == CellState.X ? CellState.O : CellState.X;
+		{
+			Model.CurrentTurnState = Model.CurrentTurnState == CellState.X ? CellState.O : CellState.X;
+
+			View.SetTurn(Model.GetCurrentPlayerLabel());
+		}
+
+		private void GameFinished(GameResult result)
+		{
+			Debug.Log(result); 
+
+			Model.GameInProgress = false;
+
+			_resultPopup = new ResultPopupController();
+			_resultPopup.CreateView(_factory, _config.ResultPopupPrefab, View.GetUiParent());
+			_resultPopup.SetResultMessage(result);
+			_resultPopup.InitButtons(Restart, GoToMenu);
+		}
+
+		private void GoToMenu()
+		{
+			_resultPopup.Clear();
+
+			_showMainMenuAction?.Invoke();
+		}
+
+		private void Restart()
+		{
+			_resultPopup.Clear();
+
+			Model.MarkedCells.Clear();
+			Model.CurrentTurnState = CellState.X;
+
+			StartGame();
+		}
+
+		public void Clear()
+		{
+			View.Clear();
+			View = null;
+		}
 	}
 }

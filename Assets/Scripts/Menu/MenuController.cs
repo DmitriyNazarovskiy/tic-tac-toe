@@ -7,12 +7,13 @@ namespace Menu
 	public class MenuController : IClearable
 	{
 		private readonly MenuModel _model;
-		private readonly MenuView _view;
 
-		public MenuController(ICommonFactory factory, GameObject menuPrefab, Transform canvas, Action<int> startGameClicked)
+		private MenuView _view;
+
+		public MenuController() => _model = new MenuModel();
+
+		public void CreateView(ICommonFactory factory, GameObject menuPrefab, Transform canvas, Action<int> startGameClicked)
 		{
-			_model = new MenuModel();
-
 			_view = factory.InstantiateObject<MenuView>(menuPrefab, canvas);
 			_view.InitStartButton(startGameClicked);
 			_view.InitModesDropdown(_model.GetGameModesTitles());

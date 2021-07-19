@@ -13,7 +13,7 @@ namespace Configs
 	[CreateAssetMenu(fileName = Constants.GameConfigNameString, menuName = Constants.GameConfigMenuPathString)]
 	public class GameConfig : ScriptableObject
 	{
-		public GameObject MainMenuPrefab, GameViewPrefab;
+		public GameObject MainMenuPrefab, GameViewPrefab, ResultPopupPrefab;
 		public Sprite X, O;
 		public WinCombination[] WinCombinations;
 		public int GameDuration = 60;
