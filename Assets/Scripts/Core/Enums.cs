@@ -3,9 +3,9 @@
 	public enum GameMode : byte
 	{
 		None = 0,
-		PlayerVsPc,
 		PlayerVsPlayer,
-		Multiplayer
+		PlayerVsPc,
+		Network
 	}
 
 	public enum CellState : byte

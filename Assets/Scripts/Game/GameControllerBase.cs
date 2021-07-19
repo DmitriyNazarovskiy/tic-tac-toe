@@ -37,6 +37,10 @@ namespace Game
 
 			StartGame();
 		}
+
+		private void CreateGameView(ICommonFactory factory, Transform canvas, GameObject gamePrefab)
+			=> View = factory.InstantiateObject<GameView>(gamePrefab, canvas);
+
 		private void InitCells()
 		{
 			_cells = new CellController[Constants.CellsAmount];
@@ -47,11 +51,6 @@ namespace Game
 			{
 				_cells[i] = new CellController(views[i], OnCellClick);
 			}
-		}
-
-		private void CreateGameView(ICommonFactory factory, Transform canvas, GameObject gamePrefab)
-		{
-			View = factory.InstantiateObject<GameView>(gamePrefab, canvas);
 		}
 
 		private void StartGame()
