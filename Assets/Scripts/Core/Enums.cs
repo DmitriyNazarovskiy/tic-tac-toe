@@ -5,6 +5,7 @@
 		None = 0,
 		PlayerVsPlayer,
 		PlayerVsPc,
+		PcVsPc,
 		Network
 	}
 

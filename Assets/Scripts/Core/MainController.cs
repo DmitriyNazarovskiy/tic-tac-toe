@@ -86,6 +86,9 @@ namespace Core
 				case GameMode.PlayerVsPc:
 					_gameController = new GameControllerPvPC(_commonFactory, _config, _timerController, ShowMainMenu, mode);
 					break;
+				case GameMode.PcVsPc:
+					_gameController = new GameControllerPCvPC(_commonFactory, _config, _timerController, ShowMainMenu, mode);
+					break;
 				default:
 					Debug.Log(Constants.DefaultErrorMessage);
 					break;

@@ -11,7 +11,7 @@ namespace Game.Cell
 
 		public CellModel Model { get; }
 
-		public CellController(CellView view, Action<byte> cellClickAction)
+		public CellController(CellView view, Action<byte> cellClickAction = null)
 		{
 			_view = view;
 			_view.Init(OnCellClicked);

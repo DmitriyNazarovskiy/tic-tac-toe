@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Configs;
 using Core;
-using UnityEngine;
 
 namespace Game
 {
@@ -11,13 +10,11 @@ namespace Game
 	{
 		private readonly int _pcDelayEntityId;
 
-		public GameControllerPvPC(ICommonFactory factory, GameConfig config, ITimerController timerController, Action showMainMenu, GameMode mode)
-			: base(factory, config, timerController, showMainMenu, mode)
-		{
-			_pcDelayEntityId = timerController.CreateTimeEntity();
-		}
+		public GameControllerPvPC(ICommonFactory factory, GameConfig config, ITimerController timerController,
+			Action showMainMenu, GameMode mode) : base(factory, config, timerController, showMainMenu, mode)
+			=> _pcDelayEntityId = timerController.CreateTimeEntity();
 
-		private async void SetRandomMark()
+		protected async void SetRandomMark()
 		{
 			var clearCells = Cells.ToList().FindAll(c => c.Model.CurrentState == CellState.Clear);
 			var randomCell = clearCells.RandomElement();
@@ -39,7 +36,12 @@ namespace Game
 		{
 			base.SwitchTurn();
 
-			if(Model.CurrentTurnState == CellState.O)
+			DoPcTurn();
+		}
+
+		protected virtual void DoPcTurn()
+		{
+			if (Model.CurrentTurnState == CellState.O)
 				SetRandomMark();
 		}
 

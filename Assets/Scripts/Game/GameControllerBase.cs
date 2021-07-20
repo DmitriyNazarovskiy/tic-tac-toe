@@ -14,23 +14,24 @@ namespace Game
 
 		private readonly GameConfig _config;
 		private readonly ICommonFactory _factory;
-		private readonly int _timerEntityId;
+		private readonly int _gameTimerEntityId;
 		private readonly Action _showMainMenuAction;
 
 		protected GameModel Model;
 		protected GameView View;
-
 		protected CellController[] Cells;
+
 		private ResultPopupController _resultPopup;
 
-		protected GameControllerBase(ICommonFactory factory, GameConfig config, ITimerController timerController, Action showMainMenu, GameMode mode)
+		protected GameControllerBase(ICommonFactory factory, GameConfig config, ITimerController timerController,
+			Action showMainMenu, GameMode mode)
 		{
 			_factory = factory;
 			_config = config;
 			TimerController = timerController;
 			_showMainMenuAction = showMainMenu;
 
-			_timerEntityId = TimerController.CreateTimeEntity();
+			_gameTimerEntityId = TimerController.CreateTimeEntity();
 
 			Model = new GameModel(config, mode);
 		}
@@ -50,11 +51,14 @@ namespace Game
 
 			for (var i = 0; i < Cells.Length; i++)
 			{
-				Cells[i] = new CellController(views[i], OnCellClick);
+				if (Model.GameMode == GameMode.PcVsPc)
+					Cells[i] = new CellController(views[i]);
+				else
+					Cells[i] = new CellController(views[i], OnCellClick);
 			}
 		}
 
-		private void StartGame()
+		protected virtual void StartGame()
 		{
 			View.SetTimer(_config.GameDuration);
 			View.SetTimerColor(_config.DefaultTimerColor);
@@ -64,7 +68,7 @@ namespace Game
 
 			Model.GameInProgress = true;
 
-			TimerController.ResetTimeEntity(_timerEntityId);
+			TimerController.ResetTimeEntity(_gameTimerEntityId);
 		}
 
 		protected void OnCellClick(byte id)
@@ -101,13 +105,13 @@ namespace Game
 					throw new ArgumentOutOfRangeException();
 			}
 
-			if(result == GameResult.None)
+			if (result == GameResult.None)
 				SwitchTurn();
 		}
 
 		public void Update(float deltaTime)
 		{
-			if(!Model.GameInProgress)
+			if (!Model.GameInProgress)
 				return;
 
 			TimerUpdate();
@@ -115,9 +119,9 @@ namespace Game
 
 		private void TimerUpdate()
 		{
-			var timerValue = (int)TimerController.ElapsedTimeReverse(_timerEntityId, _config.GameDuration);
+			var timerValue = (int) TimerController.ElapsedTimeReverse(_gameTimerEntityId, _config.GameDuration);
 
-			if(timerValue < Constants.RedTimerValue)
+			if (timerValue < Constants.RedTimerValue)
 				View.SetTimerColor(_config.LowTimerColor);
 
 			if (timerValue == 0)
@@ -137,7 +141,7 @@ namespace Game
 
 		private void GameFinished(GameResult result)
 		{
-			Debug.Log(result); 
+			Debug.Log(result);
 
 			Model.GameInProgress = false;
 
@@ -166,7 +170,7 @@ namespace Game
 
 		public virtual void Clear()
 		{
-			TimerController.RemoveEntity(_timerEntityId);
+			TimerController.RemoveEntity(_gameTimerEntityId);
 
 			View.Clear();
 			View = null;

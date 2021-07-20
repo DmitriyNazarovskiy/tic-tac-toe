@@ -1536,7 +1536,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _modesDropdown: {fileID: 7763820747579880435}
   _startButton: {fileID: 1192924725501480264}
-  _updateArt: {fileID: 431704409422697724}
+  _updateArtButton: {fileID: 431704409422697724}
+  _startButtonText: {fileID: 6944364916420623452}
 --- !u!1 &7763820747309623783
 GameObject:
   m_ObjectHideFlags: 0
