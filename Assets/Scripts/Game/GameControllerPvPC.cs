@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Configs;
 using Core;
+using UnityEngine;
 
 namespace Game
 {
@@ -20,6 +21,19 @@ namespace Game
 			SetHints(true);
 		}
 
+		protected override void StartGame()
+		{
+			base.StartGame();
+
+			View.InitUndoButton(UndoButtonPressed);
+			View.SetUndoButtonClickability(false);
+
+			TimerController.ResetTimeEntity(_hintDelayEntityId);
+
+			SetHints(false);
+			SetHints(true);
+		}
+
 		private async void SetHints(bool isShow)
 		{
 			if (!isShow)
@@ -33,17 +47,13 @@ namespace Game
 			while (TimerController.ElapsedTime(_hintDelayEntityId) < Constants.HintsDelay)
 				await Task.Delay(1);
 
+			if (!Model.GameInProgress)
+				return;
+
 			var clearCells = Cells.ToList().FindAll(c => c.Model.CurrentState == CellState.Clear);
 
 			foreach (var cell in clearCells)
 				cell.SetHint(true, Config.HintMaterial);
-		}
-
-		protected override void OnCellClick(byte id)
-		{
-			base.OnCellClick(id);
-
-			SetHints(false);
 		}
 
 		protected async void SetRandomMark()
@@ -61,18 +71,30 @@ namespace Game
 				await Task.Delay(1);
 			}
 
-			OnCellClick(randomCell.GetCellId());
+			base.OnCellClick(randomCell.GetCellId());
 
 			TimerController.ResetTimeEntity(_hintDelayEntityId);
 
 			SetHints(true);
 		}
 
+		private void UndoButtonPressed()
+		{
+			Debug.Log("UND");
+		}
+
 		protected override void SwitchTurn()
 		{
 			base.SwitchTurn();
-
+			SetHints(false);
 			DoPcTurn();
+		}
+
+		protected override void GameFinished(GameResult result)
+		{
+			base.GameFinished(result);
+
+			SetHints(false);
 		}
 
 		protected virtual void DoPcTurn()
@@ -81,11 +103,20 @@ namespace Game
 				SetRandomMark();
 		}
 
+		protected override void OnCellClick(byte id)
+		{
+			if (Model.CurrentTurnState == CellState.O)
+				return;
+
+			base.OnCellClick(id);
+		}
+
 		public override void Clear()
 		{
 			base.Clear();
 
 			TimerController.RemoveEntity(_pcDelayEntityId);
+			TimerController.RemoveEntity(_hintDelayEntityId);
 		}
 	}
 }

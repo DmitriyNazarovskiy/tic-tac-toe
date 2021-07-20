@@ -19,6 +19,7 @@ namespace Game
 
 		protected GameModel Model;
 		protected GameView View;
+		protected CellController ClickedCell;
 		protected CellController[] Cells;
 
 		private ResultPopupController _resultPopup;
@@ -76,12 +77,16 @@ namespace Game
 			if (!Model.GameInProgress)
 				return;
 
+			ClickedCell = Cells.First(c => c.GetCellId() == id);
+
+			if(ClickedCell.Model.CurrentState != CellState.Clear)
+				return;
+
 			Debug.Log("Clicked " + id);
 
-			var cell = Cells.First(c => c.GetCellId() == id);
-			cell.SetCellState(Model.CurrentTurnState, Model.GetCellSprite(Model.CurrentTurnState));
+			ClickedCell.SetCellState(Model.CurrentTurnState, Model.GetCellSprite(Model.CurrentTurnState));
 
-			Model.MarkedCells.Add(cell.Model);
+			Model.MarkedCells.Add(ClickedCell.Model);
 
 			var result = Model.CheckGameResult();
 
@@ -139,7 +144,7 @@ namespace Game
 			View.SetTurn(Model.GetCurrentPlayerLabel());
 		}
 
-		private void GameFinished(GameResult result)
+		protected virtual void GameFinished(GameResult result)
 		{
 			Debug.Log(result);
 
