@@ -11,8 +11,8 @@ namespace Game
 	public abstract class GameControllerBase : IUpdatable, IClearable
 	{
 		protected readonly ITimerController TimerController;
+		protected readonly GameConfig Config;
 
-		private readonly GameConfig _config;
 		private readonly ICommonFactory _factory;
 		private readonly int _gameTimerEntityId;
 		private readonly Action _showMainMenuAction;
@@ -27,7 +27,7 @@ namespace Game
 			Action showMainMenu, GameMode mode)
 		{
 			_factory = factory;
-			_config = config;
+			Config = config;
 			TimerController = timerController;
 			_showMainMenuAction = showMainMenu;
 
@@ -60,8 +60,8 @@ namespace Game
 
 		protected virtual void StartGame()
 		{
-			View.SetTimer(_config.GameDuration);
-			View.SetTimerColor(_config.DefaultTimerColor);
+			View.SetTimer(Config.GameDuration);
+			View.SetTimerColor(Config.DefaultTimerColor);
 			View.SetTurn(Model.GetCurrentPlayerLabel());
 
 			InitCells();
@@ -71,7 +71,7 @@ namespace Game
 			TimerController.ResetTimeEntity(_gameTimerEntityId);
 		}
 
-		protected void OnCellClick(byte id)
+		protected virtual void OnCellClick(byte id)
 		{
 			if (!Model.GameInProgress)
 				return;
@@ -119,10 +119,10 @@ namespace Game
 
 		private void TimerUpdate()
 		{
-			var timerValue = (int) TimerController.ElapsedTimeReverse(_gameTimerEntityId, _config.GameDuration);
+			var timerValue = (int) TimerController.ElapsedTimeReverse(_gameTimerEntityId, Config.GameDuration);
 
 			if (timerValue < Constants.RedTimerValue)
-				View.SetTimerColor(_config.LowTimerColor);
+				View.SetTimerColor(Config.LowTimerColor);
 
 			if (timerValue == 0)
 			{
@@ -146,7 +146,7 @@ namespace Game
 			Model.GameInProgress = false;
 
 			_resultPopup = new ResultPopupController();
-			_resultPopup.CreateView(_factory, _config.ResultPopupPrefab, View.GetUiParent());
+			_resultPopup.CreateView(_factory, Config.ResultPopupPrefab, View.GetUiParent());
 			_resultPopup.SetResultMessage(result, Model.GameMode);
 			_resultPopup.InitButtons(Restart, GoToMenu);
 		}

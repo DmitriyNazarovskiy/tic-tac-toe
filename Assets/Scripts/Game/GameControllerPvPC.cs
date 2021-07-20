@@ -9,10 +9,42 @@ namespace Game
 	public class GameControllerPvPC : GameControllerBase
 	{
 		private readonly int _pcDelayEntityId;
+		private readonly int _hintDelayEntityId;
 
 		public GameControllerPvPC(ICommonFactory factory, GameConfig config, ITimerController timerController,
 			Action showMainMenu, GameMode mode) : base(factory, config, timerController, showMainMenu, mode)
-			=> _pcDelayEntityId = timerController.CreateTimeEntity();
+		{
+			_pcDelayEntityId = timerController.CreateTimeEntity();
+			_hintDelayEntityId = timerController.CreateTimeEntity();
+
+			SetHints(true);
+		}
+
+		private async void SetHints(bool isShow)
+		{
+			if (!isShow)
+			{
+				foreach (var cell in Cells)
+					cell.SetHint(false);
+
+				return;
+			}
+
+			while (TimerController.ElapsedTime(_hintDelayEntityId) < Constants.HintsDelay)
+				await Task.Delay(1);
+
+			var clearCells = Cells.ToList().FindAll(c => c.Model.CurrentState == CellState.Clear);
+
+			foreach (var cell in clearCells)
+				cell.SetHint(true, Config.HintMaterial);
+		}
+
+		protected override void OnCellClick(byte id)
+		{
+			base.OnCellClick(id);
+
+			SetHints(false);
+		}
 
 		protected async void SetRandomMark()
 		{
@@ -22,7 +54,7 @@ namespace Game
 
 			TimerController.ResetTimeEntity(_pcDelayEntityId);
 
-			while (timer < 1)
+			while (timer < Constants.PcTurnDelay)
 			{
 				timer = TimerController.ElapsedTime(_pcDelayEntityId);
 
@@ -30,6 +62,10 @@ namespace Game
 			}
 
 			OnCellClick(randomCell.GetCellId());
+
+			TimerController.ResetTimeEntity(_hintDelayEntityId);
+
+			SetHints(true);
 		}
 
 		protected override void SwitchTurn()

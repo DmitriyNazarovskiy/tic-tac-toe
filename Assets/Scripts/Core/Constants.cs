@@ -13,5 +13,7 @@
 		public const int CellsAmount = 9;
 		public const int RequiredMarksForWin = 3;
 		public const int RedTimerValue = 10;
+		public const float PcTurnDelay = 0.7f;
+		public const float HintsDelay = 2.0f;
 	}
 }

@@ -22,6 +22,7 @@ namespace Game.Cell
 		}
 
 		private void OnCellClicked() => _cellClickAction?.Invoke(Model.Id);
+		public void SetHint(bool isShow, Material hintMaterial = null) => _view.SetHint(isShow, hintMaterial);
 
 		public void SetCellState(CellState newState, Sprite sprite)
 		{

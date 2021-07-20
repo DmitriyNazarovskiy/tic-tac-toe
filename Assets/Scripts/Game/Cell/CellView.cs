@@ -22,6 +22,7 @@ namespace Game.Cell
 
 		public void OnPointerDown(PointerEventData eventData) => _onClickAction?.Invoke();
 		public byte GetId() => (byte) _transform.GetSiblingIndex();
+		public void SetHint(bool isShow, Material hintMaterial = null) => _image.material = !isShow ? null : hintMaterial;
 
 		public void SetSprite(Sprite sprite)
 		{
