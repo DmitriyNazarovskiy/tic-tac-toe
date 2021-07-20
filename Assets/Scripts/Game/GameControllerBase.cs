@@ -10,8 +10,9 @@ namespace Game
 {
 	public abstract class GameControllerBase : IUpdatable, IClearable
 	{
+		protected readonly ITimerController TimerController;
+
 		private readonly GameConfig _config;
-		private readonly ITimerController _timerController;
 		private readonly ICommonFactory _factory;
 		private readonly int _timerEntityId;
 		private readonly Action _showMainMenuAction;
@@ -19,37 +20,37 @@ namespace Game
 		protected GameModel Model;
 		protected GameView View;
 
-		private CellController[] _cells;
+		protected CellController[] Cells;
 		private ResultPopupController _resultPopup;
 
-		protected GameControllerBase(ICommonFactory factory, Transform canvas, GameConfig config, ITimerController timerController, Action showMainMenu )
+		protected GameControllerBase(ICommonFactory factory, GameConfig config, ITimerController timerController, Action showMainMenu, GameMode mode)
 		{
 			_factory = factory;
 			_config = config;
-			_timerController = timerController;
+			TimerController = timerController;
 			_showMainMenuAction = showMainMenu;
 
-			_timerEntityId = _timerController.CreateTimeEntity();
+			_timerEntityId = TimerController.CreateTimeEntity();
 
-			Model = new GameModel(config);
+			Model = new GameModel(config, mode);
+		}
 
-			CreateGameView(_factory, canvas, config.GameViewPrefab);
+		public void CreateGameView(Transform canvas, GameObject gamePrefab)
+		{
+			View = _factory.InstantiateObject<GameView>(gamePrefab, canvas);
 
 			StartGame();
 		}
 
-		private void CreateGameView(ICommonFactory factory, Transform canvas, GameObject gamePrefab)
-			=> View = factory.InstantiateObject<GameView>(gamePrefab, canvas);
-
 		private void InitCells()
 		{
-			_cells = new CellController[Constants.CellsAmount];
+			Cells = new CellController[Constants.CellsAmount];
 
 			var views = View.GetCells();
 
-			for (var i = 0; i < _cells.Length; i++)
+			for (var i = 0; i < Cells.Length; i++)
 			{
-				_cells[i] = new CellController(views[i], OnCellClick);
+				Cells[i] = new CellController(views[i], OnCellClick);
 			}
 		}
 
@@ -63,17 +64,17 @@ namespace Game
 
 			Model.GameInProgress = true;
 
-			_timerController.ResetTimeEntity(_timerEntityId);
+			TimerController.ResetTimeEntity(_timerEntityId);
 		}
 
-		private void OnCellClick(byte id)
+		protected void OnCellClick(byte id)
 		{
 			if (!Model.GameInProgress)
 				return;
 
 			Debug.Log("Clicked " + id);
 
-			var cell = _cells.First(c => c.GetCellId() == id);
+			var cell = Cells.First(c => c.GetCellId() == id);
 			cell.SetCellState(Model.CurrentTurnState, Model.GetCellSprite(Model.CurrentTurnState));
 
 			Model.MarkedCells.Add(cell.Model);
@@ -114,7 +115,7 @@ namespace Game
 
 		private void TimerUpdate()
 		{
-			var timerValue = (int)_timerController.ElapsedTimeReverse(_timerEntityId, _config.GameDuration);
+			var timerValue = (int)TimerController.ElapsedTimeReverse(_timerEntityId, _config.GameDuration);
 
 			if(timerValue < Constants.RedTimerValue)
 				View.SetTimerColor(_config.LowTimerColor);
@@ -127,7 +128,7 @@ namespace Game
 			View.SetTimer(timerValue);
 		}
 
-		private void SwitchTurn()
+		protected virtual void SwitchTurn()
 		{
 			Model.CurrentTurnState = Model.CurrentTurnState == CellState.X ? CellState.O : CellState.X;
 
@@ -142,7 +143,7 @@ namespace Game
 
 			_resultPopup = new ResultPopupController();
 			_resultPopup.CreateView(_factory, _config.ResultPopupPrefab, View.GetUiParent());
-			_resultPopup.SetResultMessage(result);
+			_resultPopup.SetResultMessage(result, Model.GameMode);
 			_resultPopup.InitButtons(Restart, GoToMenu);
 		}
 
@@ -163,8 +164,10 @@ namespace Game
 			StartGame();
 		}
 
-		public void Clear()
+		public virtual void Clear()
 		{
+			TimerController.RemoveEntity(_timerEntityId);
+
 			View.Clear();
 			View = null;
 		}

@@ -11,13 +11,15 @@ namespace Game
 	{
 		private readonly GameConfig _config;
 
+		public GameMode GameMode { get; }
 		public bool GameInProgress { get; set; } = false;
 		public CellState CurrentTurnState { get; set; } = CellState.X;
 		public List<CellModel> MarkedCells { get; }
 
-		public GameModel(GameConfig config)
+		public GameModel(GameConfig config, GameMode mode)
 		{
 			_config = config;
+			GameMode = mode;
 
 			MarkedCells = new List<CellModel>(Constants.CellsAmount);
 		}
@@ -70,7 +72,7 @@ namespace Game
 				case PlayerType.Player1:
 					return Constants.Player1String;
 				case PlayerType.Player2:
-					return Constants.Player2String;
+					return GameMode == GameMode.PlayerVsPc ? Constants.PlayerPCString : Constants.Player2String;
 				default:
 					Debug.Log(Constants.DefaultErrorMessage);
 					break;

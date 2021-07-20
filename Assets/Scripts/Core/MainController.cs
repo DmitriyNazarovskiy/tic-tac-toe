@@ -76,10 +76,15 @@ namespace Core
 
 		private void StartGame(int modeId)
 		{
-			switch (modeId)
+			var mode = (GameMode) modeId;
+
+			switch (mode)
 			{
-				case 1:
-					_gameController = new GameControllerPvP(_commonFactory, _canvasTransform, _config, _timerController, ShowMainMenu);
+				case GameMode.PlayerVsPlayer:
+					_gameController = new GameControllerPvP(_commonFactory, _config, _timerController, ShowMainMenu, mode);
+					break;
+				case GameMode.PlayerVsPc:
+					_gameController = new GameControllerPvPC(_commonFactory, _config, _timerController, ShowMainMenu, mode);
 					break;
 				default:
 					Debug.Log(Constants.DefaultErrorMessage);
@@ -87,6 +92,7 @@ namespace Core
 			}
 
 			_menuController?.Clear();
+			_gameController?.CreateGameView(_canvasTransform, _config.GameViewPrefab);
 		}
 	}
 }
