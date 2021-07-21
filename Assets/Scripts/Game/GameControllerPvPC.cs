@@ -58,7 +58,7 @@ namespace Game
 			SetHints(true);
 		}
 
-		protected async void SetRandomMark()
+		public async void SetRandomMark()
 		{
 			var clearCells = Cells.ToList().FindAll(c => c.Model.CurrentState == CellState.Clear);
 			var randomCell = clearCells.RandomElement();
@@ -80,7 +80,7 @@ namespace Game
 			SetHints(true);
 		}
 
-		private void UndoButtonPressed()
+		public void UndoButtonPressed()
 		{
 			if (Model.MarkedCells.Count < 2)
 			{

@@ -4,6 +4,8 @@
 	{
 		public const string GameConfigMenuPathString = "Configs/Create main config";
 		public const string GameConfigNameString = "MainConfig";
+		public const string TestConfigMenuPathString = "Configs/Create test config";
+		public const string TestConfigNameString = "TestConfig";
 		public const string Player1String = "Player1";
 		public const string Player2String = "Player2";
 		public const string PlayerPCString = "PC";

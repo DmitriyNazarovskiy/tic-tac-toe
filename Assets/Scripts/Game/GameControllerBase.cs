@@ -17,8 +17,9 @@ namespace Game
 		private readonly int _gameTimerEntityId;
 		private readonly Action _showMainMenuAction;
 
-		protected GameModel Model;
-		protected GameView View;
+		public GameView View { get; private set; }
+		public GameModel Model { get; }
+
 		protected CellController ClickedCell;
 		protected CellController[] Cells;
 
