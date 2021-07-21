@@ -23,17 +23,22 @@ namespace Game.Cell
 
 		private void OnCellClicked() => _cellClickAction?.Invoke(Model.Id);
 		public void SetHint(bool isShow, Material hintMaterial = null) => _view.SetHint(isShow, hintMaterial);
+		public void ClearCell() => UpdateCellState(CellState.Clear);
+		public byte GetCellId() => Model.Id;
 
 		public void SetCellState(CellState newState, Sprite sprite)
 		{
-			if(Model.CurrentState != CellState.Clear)
+			if (Model.CurrentState != CellState.Clear)
 				return;
 
+			UpdateCellState(newState, sprite);
+		}
+
+		private void UpdateCellState(CellState newState, Sprite sprite = null)
+		{
 			Model.CurrentState = newState;
 
 			_view.SetSprite(sprite);
 		}
-
-		public byte GetCellId() => Model.Id;
 	}
 }

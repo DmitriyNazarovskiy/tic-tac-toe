@@ -27,7 +27,7 @@ namespace Game.Cell
 		public void SetSprite(Sprite sprite)
 		{
 			_image.sprite = sprite;
-			_image.color = Color.white;
+			_image.color = sprite == null ? Color.clear : Color.white;
 		}
 	}
 }

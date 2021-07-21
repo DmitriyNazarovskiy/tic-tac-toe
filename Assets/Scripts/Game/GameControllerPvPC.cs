@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Configs;
 using Core;
-using UnityEngine;
 
 namespace Game
 {
@@ -17,8 +16,6 @@ namespace Game
 		{
 			_pcDelayEntityId = timerController.CreateTimeEntity();
 			_hintDelayEntityId = timerController.CreateTimeEntity();
-
-			SetHints(true);
 		}
 
 		protected override void StartGame()
@@ -30,8 +27,7 @@ namespace Game
 
 			TimerController.ResetTimeEntity(_hintDelayEntityId);
 
-			SetHints(false);
-			SetHints(true);
+			ResetHints();
 		}
 
 		private async void SetHints(bool isShow)
@@ -54,6 +50,12 @@ namespace Game
 
 			foreach (var cell in clearCells)
 				cell.SetHint(true, Config.HintMaterial);
+		}
+
+		private void ResetHints()
+		{
+			SetHints(false);
+			SetHints(true);
 		}
 
 		protected async void SetRandomMark()
@@ -80,14 +82,38 @@ namespace Game
 
 		private void UndoButtonPressed()
 		{
-			Debug.Log("UND");
+			if (Model.MarkedCells.Count < 2)
+			{
+				View.SetUndoButtonClickability(false);
+
+				return;
+			}
+
+			var lastMoves = new[]
+			{
+				Model.MarkedCells[Model.MarkedCells.Count - 1],
+				Model.MarkedCells[Model.MarkedCells.Count - 2]
+			};
+
+			foreach (var cell in lastMoves)
+			{
+				cell.CurrentState = CellState.Clear;
+				Cells.First(c => c.GetCellId() == cell.Id).ClearCell();
+				Model.MarkedCells.Remove(cell);
+			}
+
+			ResetHints();
 		}
 
 		protected override void SwitchTurn()
 		{
 			base.SwitchTurn();
+
 			SetHints(false);
+
 			DoPcTurn();
+
+			View.SetUndoButtonClickability(Model.CurrentTurnState == CellState.X);
 		}
 
 		protected override void GameFinished(GameResult result)
@@ -101,6 +127,14 @@ namespace Game
 		{
 			if (Model.CurrentTurnState == CellState.O)
 				SetRandomMark();
+
+			CheckUndoButton();
+		}
+
+		private void CheckUndoButton()
+		{
+			if(Model.MarkedCells.Count > 1)
+				View.SetUndoButtonClickability(true);
 		}
 
 		protected override void OnCellClick(byte id)
