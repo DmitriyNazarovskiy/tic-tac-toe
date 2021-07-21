@@ -59,7 +59,9 @@ namespace Game
 			}
 		}
 
-		protected virtual void StartGame()
+		protected virtual void StartGame() => InitGameStart();
+
+		protected void InitGameStart()
 		{
 			View.SetTimer(Config.GameDuration);
 			View.SetTimerColor(Config.DefaultTimerColor);

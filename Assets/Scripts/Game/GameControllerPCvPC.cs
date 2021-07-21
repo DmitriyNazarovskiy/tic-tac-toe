@@ -16,7 +16,7 @@ namespace Game
 
 		protected override void StartGame()
 		{
-			base.StartGame();
+			InitGameStart();
 
 			SetRandomMark();
 		}
