@@ -18,6 +18,7 @@ namespace Core
 		private MenuController _menuController;
 		private GameControllerBase _gameController;
 		private ITimerController _timerController;
+		private IAudioController _audioController;
 		private bool _isArtUpdated;
 
 		private void Awake()
@@ -27,12 +28,17 @@ namespace Core
 			InitControllers();
 
 			ShowMainMenu();
+
+			AudioPlayer.PlayEffect(_config.AudioConfig.BackgroundMusic, Constants.BackgroundMusicVolume, isLoop: true);
 		}
 
 		private void InitControllers()
 		{
-			_menuController = new MenuController();
+			_menuController = new MenuController(_config);
 			_timerController = new TimerController();
+			_audioController = new AudioController();
+
+			AudioPlayer.Init(_audioController);
 		}
 
 		private void ShowMainMenu()
@@ -48,6 +54,8 @@ namespace Core
 
 		private void UpdateArt()
 		{
+			AudioPlayer.PlayEffect(_config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
+
 			if (_isArtUpdated)
 				return;
 
@@ -96,6 +104,8 @@ namespace Core
 
 			_menuController?.Clear();
 			_gameController?.CreateGameView(_canvasTransform, _config.GameViewPrefab);
+
+			AudioPlayer.PlayEffect(_config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
 		}
 	}
 }

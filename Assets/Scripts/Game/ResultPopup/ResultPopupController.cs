@@ -15,7 +15,8 @@ namespace Game.ResultPopup
 			=> _view = factory.InstantiateObject<ResultPopupView>(prefab, parent);
 		public void InitButtons(Action restartButtonAction, Action menuButtonAction)
 			=> _view.InitButtons(restartButtonAction, menuButtonAction);
-		public void SetResultMessage(GameResult result, GameMode mode) => _view.SetResult(_model.GetPopupMessage(result, mode));
+		public void SetResultMessage(GameResult result, GameMode mode)
+			=> _view.SetResult(_model.GetPopupMessage(result, mode));
 
 		public void Clear()
 		{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Configs;
 using Core;
 
 namespace Menu
@@ -9,6 +10,10 @@ namespace Menu
 	{
 		public const string StartLabel = "Start";
 		public const string SoonLabel = "Soon";
+
+		public GameConfig Config { get; }
+
+		public MenuModel(GameConfig config) => Config = config;
 
 		public List<string> GetGameModesTitles()
 		{

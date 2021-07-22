@@ -19,6 +19,7 @@ namespace Configs
 		public int GameDuration = 60;
 		public Color DefaultTimerColor, LowTimerColor;
 		public Material HintMaterial;
+		public AudioConfig AudioConfig;
 		[NonSerialized] public Sprite LoadedX, LoadedO, LoadedBg;
 	}
 }

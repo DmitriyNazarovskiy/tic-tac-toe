@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f457611e279ad854ba983d655bc26ec6, type: 3}
+  m_Name: AudioConfig
+  m_EditorClassIdentifier: 
+  BackgroundMusic: {fileID: 8300000, guid: 7a34b1a65a7401b48b34c18017c9b562, type: 3}
+  TapSound: {fileID: 8300000, guid: 7144bb67af7e7f947a3f5741fea3e98d, type: 3}
+  WrongTapSound: {fileID: 8300000, guid: 9f692cc662b7d8c43a5a0716a56988cf, type: 3}
+  GameFinished: {fileID: 8300000, guid: e5d20cab90ca82b46b1d037dd80ccbde, type: 3}

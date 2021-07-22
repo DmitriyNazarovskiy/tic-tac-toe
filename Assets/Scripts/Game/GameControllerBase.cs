@@ -82,10 +82,15 @@ namespace Game
 
 			ClickedCell = Cells.First(c => c.GetCellId() == id);
 
-			if(ClickedCell.Model.CurrentState != CellState.Clear)
-				return;
+			if (ClickedCell.Model.CurrentState != CellState.Clear)
+			{
+				AudioPlayer.PlayEffect(Config.AudioConfig.WrongTapSound, Constants.DefaultSoundVolume);
 
-			Debug.Log("Clicked " + id);
+				return;
+			}
+
+			AudioPlayer.PlayEffect(Config.AudioConfig.TapSound, Constants.DefaultSoundVolume,
+				pitch: Model.CurrentTurnState == CellState.X ? Constants.DefaultPitch : Constants.CircleMovePitch);
 
 			ClickedCell.SetCellState(Model.CurrentTurnState, Model.GetCellSprite(Model.CurrentTurnState));
 
@@ -133,9 +138,7 @@ namespace Game
 				View.SetTimerColor(Config.LowTimerColor);
 
 			if (timerValue == 0)
-			{
 				GameFinished(GameResult.TimeOver);
-			}
 
 			View.SetTimer(timerValue);
 		}
@@ -149,7 +152,7 @@ namespace Game
 
 		protected virtual void GameFinished(GameResult result)
 		{
-			Debug.Log(result);
+			AudioPlayer.PlayEffect(Config.AudioConfig.GameFinished, Constants.DefaultSoundVolume);
 
 			Model.GameInProgress = false;
 
@@ -161,6 +164,8 @@ namespace Game
 
 		private void GoToMenu()
 		{
+			AudioPlayer.PlayEffect(Config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
+
 			_resultPopup.Clear();
 
 			_showMainMenuAction?.Invoke();
@@ -168,6 +173,8 @@ namespace Game
 
 		private void Restart()
 		{
+			AudioPlayer.PlayEffect(Config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
+
 			_resultPopup.Clear();
 
 			Model.MarkedCells.Clear();

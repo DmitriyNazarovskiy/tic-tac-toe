@@ -29,7 +29,8 @@ namespace Core
 
 		private List<AudioEffect> _effects;
 
-		public void Init() => _effects = new List<AudioEffect>();
+		public AudioController() => Init();
+		private void Init() => _effects = new List<AudioEffect>();
 		private void RemoveFromList(AudioEffect effect) => _effects.Remove(effect);
 		private AudioEffect GetEffectFromList(int id) => _effects.Find(e => e.Id == id);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Configs;
 using Core;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace Menu
 
 		private MenuView _view;
 
-		public MenuController() => _model = new MenuModel();
+		public MenuController(GameConfig config) => _model = new MenuModel(config);
 
 		public void HideUpdateArtButton() => _view.HideUpdateArtButton();
 
@@ -24,6 +25,8 @@ namespace Menu
 
 		private void OnGameModeValueChanged(int value)
 		{
+			AudioPlayer.PlayEffect(_model.Config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
+
 			if ((GameMode) value + 1 != GameMode.Network) //+1 because we need to skip "None" mode which is 0
 			{
 				_view.SetStartButtonState(true, MenuModel.StartLabel);

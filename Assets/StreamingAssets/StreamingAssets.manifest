@@ -1,7 +1,7 @@
 ManifestFileVersion: 0
-CRC: 1223959033
+CRC: 4261105157
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: artbundle.unity3d
+      Name: newart.unity3d
       Dependencies: {}

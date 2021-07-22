@@ -45,7 +45,8 @@ MonoBehaviour:
   - Value1: 2
     Value2: 4
     Value3: 6
-  GameDuration: 60
+  GameDuration: 12
   DefaultTimerColor: {r: 1, g: 1, b: 1, a: 1}
   LowTimerColor: {r: 1, g: 0, b: 0, a: 1}
   HintMaterial: {fileID: 2100000, guid: 62cc4a489472ecd44a99d6741b17ae6a, type: 2}
+  AudioConfig: {fileID: 11400000, guid: 0602c434dfacb1b4aa3022f56d9a76e4, type: 2}

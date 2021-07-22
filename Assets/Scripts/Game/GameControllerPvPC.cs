@@ -82,12 +82,7 @@ namespace Game
 
 		public void UndoButtonPressed()
 		{
-			if (Model.MarkedCells.Count < 2)
-			{
-				View.SetUndoButtonClickability(false);
-
-				return;
-			}
+			AudioPlayer.PlayEffect(Config.AudioConfig.TapSound, Constants.DefaultSoundVolume);
 
 			var lastMoves = new[]
 			{
@@ -103,6 +98,8 @@ namespace Game
 			}
 
 			ResetHints();
+
+			View.SetUndoButtonClickability(Model.MarkedCells.Count > 1);
 		}
 
 		protected override void SwitchTurn()
