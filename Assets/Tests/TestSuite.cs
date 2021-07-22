@@ -11,6 +11,12 @@ using UnityEngine.UI;
 
 namespace Tests
 {
+	/// <summary>
+	/// As I told you before, these are my first Unit-tests. I believe the look not well and implement not "right way".
+	/// In general, I understand what they do and how they work.
+	/// Also, I believe that the architecture I've built is not the best for Unit tests.
+	/// This is why they look weird (at least for me) :)
+	/// </summary>
 	public class TestSuite
 	{
 		private TestConfig _testConfig;
