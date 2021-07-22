@@ -11,6 +11,8 @@ namespace Game
 		private readonly int _pcDelayEntityId;
 		private readonly int _hintDelayEntityId;
 
+		private bool _doHintsForceReset = false;
+
 		public GameControllerPvPC(ICommonFactory factory, GameConfig config, ITimerController timerController,
 			Action showMainMenu, GameMode mode) : base(factory, config, timerController, showMainMenu, mode)
 		{
@@ -34,14 +36,25 @@ namespace Game
 		{
 			if (!isShow)
 			{
+				_doHintsForceReset = true;
+
+				await Task.Delay(5);
+
 				foreach (var cell in Cells)
 					cell.SetHint(false);
+
+				_doHintsForceReset = false;
 
 				return;
 			}
 
 			while (TimerController.ElapsedTime(_hintDelayEntityId) < Constants.HintsDelay)
+			{
 				await Task.Delay(1);
+
+				if(_doHintsForceReset)
+					return;
+			}
 
 			if (!Model.GameInProgress)
 				return;

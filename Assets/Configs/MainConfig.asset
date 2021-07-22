@@ -45,7 +45,7 @@ MonoBehaviour:
   - Value1: 2
     Value2: 4
     Value3: 6
-  GameDuration: 12
+  GameDuration: 30
   DefaultTimerColor: {r: 1, g: 1, b: 1, a: 1}
   LowTimerColor: {r: 1, g: 0, b: 0, a: 1}
   HintMaterial: {fileID: 2100000, guid: 62cc4a489472ecd44a99d6741b17ae6a, type: 2}
