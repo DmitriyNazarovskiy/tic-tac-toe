@@ -11,7 +11,13 @@ namespace Game.ResultPopup
 		[SerializeField] private TMP_Text _result;
 		[SerializeField] private Button _restartButton, _menuButton;
 
-		public void SetResult(string resultMessage) => _result.text = resultMessage;
+		public void SetResult(string resultMessage)
+		{
+			_result.text = resultMessage;
+
+			gameObject.AddComponent<ScaleVisualEffect>().Play();
+		}
+
 		public void Clear() => Destroy(gameObject);
 
 		public void InitButtons(Action restartAction, Action menuAction)
