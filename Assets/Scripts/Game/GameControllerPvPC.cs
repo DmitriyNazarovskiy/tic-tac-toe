@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Configs;
 using Core;
+using UnityEngine;
 
 namespace Game
 {
@@ -27,8 +28,6 @@ namespace Game
 			View.InitUndoButton(UndoButtonPressed);
 			View.SetUndoButtonClickability(false);
 
-			TimerController.ResetTimeEntity(_hintDelayEntityId);
-
 			ResetHints();
 		}
 
@@ -43,10 +42,11 @@ namespace Game
 				foreach (var cell in Cells)
 					cell.SetHint(false);
 
-				_doHintsForceReset = false;
-
 				return;
 			}
+
+			TimerController.ResetTimeEntity(_hintDelayEntityId);
+			_doHintsForceReset = false;
 
 			while (TimerController.ElapsedTime(_hintDelayEntityId) < Constants.HintsDelay)
 			{
@@ -87,8 +87,6 @@ namespace Game
 			}
 
 			base.OnCellClick(randomCell.GetCellId());
-
-			TimerController.ResetTimeEntity(_hintDelayEntityId);
 
 			SetHints(true);
 		}
