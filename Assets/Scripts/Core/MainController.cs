@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Configs;
 using Game;
 using Menu;
@@ -58,6 +59,15 @@ namespace Core
 
 			if (_isArtUpdated)
 				return;
+
+			if (!File.Exists(PlayerPrefs.GetString(Constants.PlayerPrefsBundleKey)))
+			{
+				Debug.Log(Constants.DefaultErrorMessage);
+
+				_menuController.HideUpdateArtButton();
+
+				return;
+			}
 
 			var bundle = AssetBundle.LoadFromFile(PlayerPrefs.GetString(Constants.PlayerPrefsBundleKey));
 			var assets = bundle.LoadAllAssets<Sprite>();
